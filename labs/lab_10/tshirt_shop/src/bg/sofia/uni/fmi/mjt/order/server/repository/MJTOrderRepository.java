@@ -108,12 +108,8 @@ public class MJTOrderRepository implements OrderRepository {
 
     @Override
     public Response getOrderById(int id) {
-        for (Order o : orders) {
-            if (o.id() == id) {
-                return Response.ok(List.of(o));
-            }
-        }
-        return Response.notFound(id);
+        Optional<Order> order = orders.stream().filter( o -> o.id() == id).findAny();
+        return order.isPresent() ? Response.ok(List.of(order.get())) : Response.notFound(id);
     }
 
     @Override
